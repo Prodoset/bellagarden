@@ -66,8 +66,62 @@
     align-items: start;
   }
 
-  /* Panel */
-  .panel {
+  /* Channel Tabs (Header) */
+  .channel-tabs {
+    display: flex;
+    gap: 6px;
+  }
+  .channel-tab {
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1.5px solid rgba(255,255,255,0.35);
+    color: rgba(255,255,255,0.7);
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .channel-tab.active {
+    background: white;
+    color: var(--green-deep);
+    border-color: white;
+  }
+  .channel-tab:hover:not(.active) {
+    background: rgba(255,255,255,0.15);
+    color: white;
+  }
+
+  .action-btns {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .download-btn {
+    flex: 1;
+    padding: 10px;
+    background: var(--cream-dark);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--green-deep);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .download-btn:hover { background: var(--border); }
+  .copy-btn { flex: 1; margin-top: 0; }
+
+  /* Insta type grid */
+  .insta-type-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+
     background: var(--white);
     border-radius: 12px;
     border: 1px solid var(--border);
@@ -400,7 +454,7 @@
   .blog-output::-webkit-scrollbar-thumb { background: var(--green-light); border-radius: 3px; }
 
   .copy-btn {
-    margin-top: 12px;
+    margin-top: 0;
     padding: 10px 20px;
     background: var(--green-deep);
     color: white;
@@ -505,11 +559,17 @@
 <div class="header">
   <div>
     <div class="header-logo">BELLA GARDEN</div>
-    <div class="header-sub">Blog Content Generator</div>
+    <div class="header-sub">Marketing Content Generator</div>
   </div>
   <div class="header-divider"></div>
   <div style="font-size:12px; color:rgba(255,255,255,0.7); line-height:1.6;">
-    블랙키위 키워드 기반<br>네이버 블로그 초안 생성기
+    블랙키위 키워드 기반<br>마케팅 콘텐츠 자동 생성기
+  </div>
+  <div style="margin-left:auto;">
+    <div class="channel-tabs">
+      <div class="channel-tab active" onclick="switchChannel('blog')" id="channelBlog">📝 네이버 블로그</div>
+      <div class="channel-tab" onclick="switchChannel('insta')" id="channelInsta">📸 인스타그램</div>
+    </div>
   </div>
 </div>
 
@@ -541,38 +601,77 @@
 
       <div class="divider"></div>
 
-      <!-- Blog Type -->
-      <div class="section-label">블로그 글 유형</div>
-      <div class="type-grid">
-        <div class="type-card" data-type="review" onclick="selectType(this)">
-          <div class="type-icon">⭐</div>
-          <div class="type-name">구매 후기형</div>
-          <div class="type-desc">1인칭 생생한 사용 경험</div>
+      <!-- Blog Type (네이버 블로그) -->
+      <div id="blogTypeSection">
+        <div class="section-label">블로그 글 유형</div>
+        <div class="type-grid">
+          <div class="type-card" data-type="review" onclick="selectType(this)">
+            <div class="type-icon">⭐</div>
+            <div class="type-name">구매 후기형</div>
+            <div class="type-desc">1인칭 생생한 사용 경험</div>
+          </div>
+          <div class="type-card" data-type="intro" onclick="selectType(this)">
+            <div class="type-icon">📦</div>
+            <div class="type-name">상품 소개형</div>
+            <div class="type-desc">제품 특징 & 스펙 중심</div>
+          </div>
+          <div class="type-card" data-type="gift" onclick="selectType(this)">
+            <div class="type-icon">🎁</div>
+            <div class="type-name">선물 추천형</div>
+            <div class="type-desc">집들이·생일·기념일 추천</div>
+          </div>
+          <div class="type-card" data-type="styling" onclick="selectType(this)">
+            <div class="type-icon">🏠</div>
+            <div class="type-name">인테리어 스타일링형</div>
+            <div class="type-desc">공간 연출 & 홈데코 중심</div>
+          </div>
+          <div class="type-card" data-type="care" onclick="selectType(this)">
+            <div class="type-icon">💧</div>
+            <div class="type-name">식물 관리 팁형</div>
+            <div class="type-desc">관리법 + 브랜드 자연 노출</div>
+          </div>
+          <div class="type-card" data-type="season" onclick="selectType(this)">
+            <div class="type-icon">🌸</div>
+            <div class="type-name">계절 기획형</div>
+            <div class="type-desc">시즌 감성 + 트렌드 연계</div>
+          </div>
         </div>
-        <div class="type-card" data-type="intro" onclick="selectType(this)">
-          <div class="type-icon">📦</div>
-          <div class="type-name">상품 소개형</div>
-          <div class="type-desc">제품 특징 & 스펙 중심</div>
-        </div>
-        <div class="type-card" data-type="gift" onclick="selectType(this)">
-          <div class="type-icon">🎁</div>
-          <div class="type-name">선물 추천형</div>
-          <div class="type-desc">집들이·생일·기념일 추천</div>
-        </div>
-        <div class="type-card" data-type="styling" onclick="selectType(this)">
-          <div class="type-icon">🏠</div>
-          <div class="type-name">인테리어 스타일링</div>
-          <div class="type-desc">공간별 연출 & 분위기</div>
-        </div>
-        <div class="type-card" data-type="care" onclick="selectType(this)">
-          <div class="type-icon">💧</div>
-          <div class="type-name">식물 관리 팁형</div>
-          <div class="type-desc">관리법 + 브랜드 자연 노출</div>
-        </div>
-        <div class="type-card" data-type="season" onclick="selectType(this)">
-          <div class="type-icon">🍃</div>
-          <div class="type-name">계절 기획형</div>
-          <div class="type-desc">시즌 감성 + 트렌드 연계</div>
+      </div>
+
+      <!-- Insta Type (인스타그램) -->
+      <div id="instaTypeSection" style="display:none;">
+        <div class="section-label">인스타그램 콘텐츠 유형</div>
+        <div class="insta-type-grid">
+          <div class="type-card" data-type="insta_product" onclick="selectType(this)">
+            <div class="type-icon">🪴</div>
+            <div class="type-name">제품 피드</div>
+            <div class="type-desc">제품 감성 소개 & 구매 유도</div>
+          </div>
+          <div class="type-card" data-type="insta_lifestyle" onclick="selectType(this)">
+            <div class="type-icon">✨</div>
+            <div class="type-name">라이프스타일 피드</div>
+            <div class="type-desc">공간·일상 감성 연출</div>
+          </div>
+          <div class="type-card" data-type="insta_tip" onclick="selectType(this)">
+            <div class="type-icon">🌱</div>
+            <div class="type-name">식물 팁 피드</div>
+            <div class="type-desc">유용한 정보로 저장 유도</div>
+          </div>
+          <div class="type-card" data-type="insta_gift" onclick="selectType(this)">
+            <div class="type-icon">🎁</div>
+            <div class="type-name">선물 피드</div>
+            <div class="type-desc">선물 추천·이벤트 홍보</div>
+          </div>
+          <div class="type-card" data-type="insta_season" onclick="selectType(this)">
+            <div class="type-icon">🌸</div>
+            <div class="type-name">계절 기획 피드</div>
+            <div class="type-desc">시즌 감성 + 트렌드</div>
+          </div>
+          <div class="type-card" data-type="insta_review" onclick="selectType(this)">
+            <div class="type-icon">💬</div>
+            <div class="type-name">후기 피드</div>
+            <div class="type-desc">실사용 후기 감성 재편집</div>
+          </div>
         </div>
       </div>
 
@@ -628,10 +727,10 @@
 
       <div id="errorMsg" class="error-msg"></div>
 
-      <button class="generate-btn" id="generateBtn" onclick="generateBlog()">
+      <button class="generate-btn" id="generateBtn" onclick="handleGenerate()">
         <div class="btn-inner">
           <span>✦</span>
-          <span>네이버 블로그 초안 생성</span>
+          <span id="generateBtnText">네이버 블로그 초안 생성</span>
         </div>
       </button>
 
@@ -640,7 +739,7 @@
 
   <!-- RIGHT PANEL -->
   <div class="panel output-panel" id="outputPanel">
-    <div class="panel-header">✦ 생성된 블로그 초안</div>
+    <div class="panel-header" id="outputPanelHeader">✦ 생성된 블로그 초안</div>
 
     <div id="placeholderArea" class="output-placeholder">
       <div class="placeholder-icon">🌿</div>
@@ -653,21 +752,33 @@
 
     <div id="loadingState" class="loading-state">
       <div class="loader"></div>
-      <div class="loading-text" id="loadingText">블로그 초안을 생성하고 있어요...</div>
+      <div class="loading-text" id="loadingText">콘텐츠를 생성하고 있어요...</div>
     </div>
 
+    <!-- 블로그 결과 탭 -->
     <div id="resultArea" class="result-area">
-      <div class="result-tabs">
+      <div class="result-tabs" id="blogResultTabs">
         <div class="result-tab active" onclick="switchTab(this,'full')">전체 초안</div>
         <div class="result-tab" onclick="switchTab(this,'title')">제목 후보</div>
         <div class="result-tab" onclick="switchTab(this,'image')">이미지 컷</div>
         <div class="result-tab" onclick="switchTab(this,'hashtag')">해시태그</div>
         <div class="result-tab" onclick="switchTab(this,'checklist')">발행 체크</div>
       </div>
+      <!-- 인스타 결과 탭 -->
+      <div class="result-tabs" id="instaResultTabs" style="display:none;">
+        <div class="result-tab active" onclick="switchTab(this,'insta_a')">✨ 감성형</div>
+        <div class="result-tab" onclick="switchTab(this,'insta_b')">💾 저장유도형</div>
+        <div class="result-tab" onclick="switchTab(this,'insta_c')">🛒 판매형</div>
+        <div class="result-tab" onclick="switchTab(this,'insta_hashtag')">해시태그 30</div>
+        <div class="result-tab" onclick="switchTab(this,'insta_photo')">촬영 가이드</div>
+      </div>
       <div class="result-content">
         <div class="result-meta" id="resultMeta"></div>
         <div id="blogOutput" class="blog-output"></div>
-        <button class="copy-btn" id="copyBtn" onclick="copyOutput()">📋 복사하기</button>
+        <div class="action-btns">
+          <button class="copy-btn" id="copyBtn" onclick="copyOutput()">📋 복사하기</button>
+          <button class="download-btn" id="downloadBtn" onclick="downloadTxt()">⬇ TXT 저장</button>
+        </div>
       </div>
     </div>
 
@@ -831,7 +942,8 @@ const TYPE_PROMPTS = {
 let currentSector = 'plant';
 let selectedProduct = null;
 let selectedType = null;
-let currentResults = { full: '', title: '', image: '', hashtag: '', checklist: '' };
+let currentChannel = 'blog'; // 'blog' | 'insta'
+let currentResults = { full: '', title: '', image: '', hashtag: '', checklist: '', insta_a: '', insta_b: '', insta_c: '', insta_hashtag: '', insta_photo: '' };
 let currentTab = 'full';
 
 // ============================
@@ -918,6 +1030,47 @@ function getKeywords() {
 // ============================
 // 탭 전환
 // ============================
+// ============================
+// 채널 전환
+// ============================
+function switchChannel(channel) {
+  currentChannel = channel;
+  selectedType = null;
+
+  // 탭 UI
+  document.getElementById('channelBlog').classList.toggle('active', channel === 'blog');
+  document.getElementById('channelInsta').classList.toggle('active', channel === 'insta');
+
+  // 글 유형 섹션 전환
+  document.getElementById('blogTypeSection').style.display = channel === 'blog' ? '' : 'none';
+  document.getElementById('instaTypeSection').style.display = channel === 'insta' ? '' : 'none';
+
+  // 선택 초기화
+  document.querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
+
+  // 결과 탭 전환
+  document.getElementById('blogResultTabs').style.display = channel === 'blog' ? '' : 'none';
+  document.getElementById('instaResultTabs').style.display = channel === 'insta' ? '' : 'none';
+
+  // 버튼 텍스트
+  document.getElementById('generateBtnText').textContent = channel === 'blog' ? '네이버 블로그 초안 생성' : '인스타그램 콘텐츠 생성';
+
+  // 패널 헤더
+  document.getElementById('outputPanelHeader').textContent = channel === 'blog' ? '✦ 생성된 블로그 초안' : '✦ 생성된 인스타그램 콘텐츠';
+
+  // 첫 탭 선택
+  currentTab = channel === 'blog' ? 'full' : 'insta_a';
+
+  // 결과 초기화
+  document.getElementById('resultArea').classList.remove('show');
+  document.getElementById('placeholderArea').style.display = '';
+}
+
+function handleGenerate() {
+  if (currentChannel === 'blog') generateBlog();
+  else generateInsta();
+}
+
 function switchTab(tab, type) {
   document.querySelectorAll('.result-tab').forEach(t => t.classList.remove('active'));
   tab.classList.add('active');
@@ -1097,8 +1250,8 @@ ${kwText}
     `;
 
     // 탭 초기화
-    document.querySelectorAll('.result-tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.result-tab')[0].classList.add('active');
+    document.querySelectorAll('#blogResultTabs .result-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('#blogResultTabs .result-tab')[0].classList.add('active');
     currentTab = 'full';
     document.getElementById('blogOutput').textContent = currentResults.full;
 
@@ -1112,12 +1265,233 @@ ${kwText}
 
 function setLoading(show) {
   document.getElementById('generateBtn').disabled = show;
+  const btnText = currentChannel === 'blog' ? '네이버 블로그 초안 생성' : '인스타그램 콘텐츠 생성';
   document.getElementById('generateBtn').querySelector('.btn-inner').innerHTML = show
     ? '<span class="loader" style="width:16px;height:16px;border-width:2px;"></span><span>생성 중...</span>'
-    : '<span>✦</span><span>네이버 블로그 초안 생성</span>';
+    : `<span>✦</span><span>${btnText}</span>`;
   document.getElementById('loadingState').classList.toggle('show', show);
   document.getElementById('placeholderArea').style.display = show ? 'none' : 'flex';
   if (show) document.getElementById('resultArea').classList.remove('show');
+}
+
+// ============================
+// 인스타그램 생성 함수
+// ============================
+async function generateInsta() {
+  const apiKey = document.getElementById('apiKey').value.trim();
+  const errorMsg = document.getElementById('errorMsg');
+  errorMsg.classList.remove('show');
+
+  if (!apiKey) { showError('Claude API Key를 입력해주세요.'); return; }
+  if (!selectedProduct) { showError('제품을 선택해주세요.'); return; }
+  if (!selectedType) { showError('콘텐츠 유형을 선택해주세요.'); return; }
+
+  const keywords = getKeywords();
+  const targets = [...document.querySelectorAll('#targetChips .chip.selected')].map(c => c.textContent);
+  const tone = document.getElementById('toneSelect').value;
+
+  setLoading(true);
+  document.getElementById('placeholderArea').style.display = 'none';
+  document.getElementById('resultArea').classList.remove('show');
+
+  const kwText = keywords.length > 0
+    ? keywords.map(k => `- "${k.kw}"${k.vol ? ` (검색량: ${k.vol})` : ''}`).join('\n')
+    : '(키워드 미입력)';
+  const targetText = targets.length > 0 ? targets.join(', ') : '일반 소비자';
+
+  const toneMap = {
+    friendly: '친근하고 따뜻한 말투',
+    reviewer: '솔직하고 생생한 경험담 말투',
+    expert: '신뢰감 있는 전문가 어조',
+    emotional: '감성적이고 시적인 스타일',
+    simple: '심플하고 직관적인 말투'
+  };
+
+  const instaTypeMap = {
+    insta_product:   '제품 피드 - 제품 감성 소개 & 구매 유도',
+    insta_lifestyle: '라이프스타일 피드 - 공간·일상 감성 연출',
+    insta_tip:       '식물 팁 피드 - 유용한 정보로 저장 유도',
+    insta_gift:      '선물 피드 - 선물 추천·이벤트 홍보',
+    insta_season:    '계절 기획 피드 - 시즌 감성 + 트렌드',
+    insta_review:    '후기 피드 - 실사용 후기 감성 재편집'
+  };
+
+  const systemPrompt = `너는 벨라가든의 인스타그램 전담 SNS 마케터야.
+브랜드: 벨라가든 (Bellagarden) / "손길은 덜어내고, 아름다움을 채웁니다"
+쇼핑몰: bellagarden.co.kr | 운영사: (주)하트무빙랩
+타겟: 20-30대 여성, 1인가구, 신혼부부
+
+인스타그램 캡션 규칙:
+- 150-300자, 첫 줄이 핵심 (더보기 전 노출)
+- 이모지 자연스럽게 (과하지 않게)
+- 광고 느낌보다 일상·감성 느낌
+- 각 문구는 명확한 목적(저장/공유/클릭) 달성에 집중`;
+
+  const userPrompt = `아래 정보를 바탕으로 인스타그램 콘텐츠를 작성해주세요.
+
+[제품 정보]
+${selectedProduct.detail}
+
+[콘텐츠 유형]
+${instaTypeMap[selectedType] || selectedType}
+
+[타겟 독자]
+${targetText}
+
+[톤 스타일]
+${toneMap[tone]}
+
+[참고 키워드]
+${kwText}
+
+다음 5개 섹션을 반드시 모두 출력하세요:
+
+===감성형===
+(목적: 브랜드 감성 전달 + 저장(save) 유도
+첫 줄에 감성적인 한 줄 문장, 이어서 제품 감성 묘사, 마지막에 "벨라가든에서 만나보세요 👉 bellagarden.co.kr"
+150-250자)
+
+===저장유도형===
+(목적: 정보성 + 저장(save) 유도
+첫 줄에 "저장해두면 유용한" 또는 숫자 포함 훅, 유용한 정보나 팁 나열, 마지막에 저장 유도 문구
+150-250자)
+
+===판매형===
+(목적: 클릭/구매(CTA) 유도
+첫 줄에 강한 훅, 혜택·가격·한정 요소 자연스럽게 포함, 명확한 CTA + bellagarden.co.kr 링크
+150-250자)
+
+===해시태그===
+(인스타그램 해시태그 정확히 30개
+인기 일반 태그 10개 + 식물/가드닝 관련 태그 10개 + 벨라가든 브랜드/니치 태그 10개
+한 줄로 나열)
+
+===촬영가이드===
+(이 콘텐츠 유형에 맞는 사진 촬영 가이드 3가지
+앵글/배경/소품/조명/분위기 등 구체적으로)
+
+[중요] 위 5개 섹션(===감성형===, ===저장유도형===, ===판매형===, ===해시태그===, ===촬영가이드===)을 반드시 모두 출력하세요. 어떤 섹션도 생략하지 마세요.`;
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-5-20250929',
+        max_tokens: 4000,
+        system: systemPrompt,
+        messages: [{ role: 'user', content: userPrompt }]
+      })
+    });
+
+    if (!response.ok) {
+      const err = await response.json();
+      throw new Error(err.error?.message || `API 오류: ${response.status}`);
+    }
+
+    const data = await response.json();
+    const fullText = data.content.filter(b => b.type === 'text').map(b => b.text).join('\n');
+
+    // 파싱
+    const sections = {};
+    const splitData = fullText.split('===');
+    for (let i = 1; i < splitData.length; i += 2) {
+      const key = splitData[i].trim();
+      const value = splitData[i + 1]?.trim();
+      if (key && value) sections[key] = value;
+    }
+
+    currentResults.insta_a       = sections['감성형']    || '감성형 문구 파싱 실패';
+    currentResults.insta_b       = sections['저장유도형'] || '저장유도형 문구 파싱 실패';
+    currentResults.insta_c       = sections['판매형']    || '판매형 문구 파싱 실패';
+    currentResults.insta_hashtag = sections['해시태그']  || '해시태그 파싱 실패';
+    currentResults.insta_photo   = sections['촬영가이드'] || '촬영 가이드 파싱 실패';
+
+    setLoading(false);
+    document.getElementById('resultArea').classList.add('show');
+
+    const typeLabel = document.querySelector('.type-card.selected .type-name')?.textContent || '';
+    document.getElementById('resultMeta').innerHTML = `
+      <span class="meta-badge green">${selectedProduct.name.split(' ').slice(0,2).join(' ')}</span>
+      <span class="meta-badge terra">${typeLabel}</span>
+      <span class="meta-badge green">📸 인스타그램</span>
+    `;
+
+    document.querySelectorAll('#instaResultTabs .result-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('#instaResultTabs .result-tab')[0].classList.add('active');
+    currentTab = 'insta_a';
+    document.getElementById('blogOutput').textContent = currentResults.insta_a;
+
+  } catch (err) {
+    setLoading(false);
+    document.getElementById('placeholderArea').style.display = 'flex';
+    showError(`오류: ${err.message}`);
+    console.error(err);
+  }
+}
+
+// ============================
+// TXT 다운로드
+// ============================
+function downloadTxt() {
+  let content = '';
+  const prod = selectedProduct ? selectedProduct.name : '제품 미선택';
+  const date = new Date().toLocaleDateString('ko-KR');
+
+  if (currentChannel === 'blog') {
+    content = [
+      `벨라가든 블로그 콘텐츠 | ${prod} | ${date}`,
+      '='.repeat(50),
+      '',
+      '【 제목 후보 】',
+      currentResults.title,
+      '',
+      '【 블로그 본문 】',
+      currentResults.full,
+      '',
+      '【 이미지 컷 제안 】',
+      currentResults.image,
+      '',
+      '【 해시태그 】',
+      currentResults.hashtag,
+      '',
+      '【 발행 체크리스트 】',
+      currentResults.checklist,
+    ].join('\n');
+  } else {
+    content = [
+      `벨라가든 인스타그램 콘텐츠 | ${prod} | ${date}`,
+      '='.repeat(50),
+      '',
+      '【 문구 A - 감성형 】',
+      currentResults.insta_a,
+      '',
+      '【 문구 B - 저장유도형 】',
+      currentResults.insta_b,
+      '',
+      '【 문구 C - 판매형 】',
+      currentResults.insta_c,
+      '',
+      '【 해시태그 30개 】',
+      currentResults.insta_hashtag,
+      '',
+      '【 촬영 가이드 】',
+      currentResults.insta_photo,
+    ].join('\n');
+  }
+
+  const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `벨라가든_${currentChannel === 'blog' ? '블로그' : '인스타'}_${prod}_${date}.txt`;
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
 function showError(msg) {
