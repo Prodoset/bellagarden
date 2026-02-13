@@ -390,7 +390,7 @@
     line-height: 1.9;
     color: var(--charcoal);
     white-space: pre-wrap;
-    max-height: calc(100vh - 280px);
+    max-height: 600px;
     overflow-y: auto;
     font-family: 'Noto Sans KR', sans-serif;
   }
@@ -1068,18 +1068,24 @@ ${kwText}
     const data = await response.json();
     const fullText = data.content[0].text;
 
-    // 파싱
-    const titleMatch = fullText.match(/===제목후보===([\s\S]*?)===본문===/);
-    const bodyMatch = fullText.match(/===본문===([\s\S]*?)===이미지컷===/);
-    const imageMatch = fullText.match(/===이미지컷===([\s\S]*?)===해시태그===/);
-    const hashMatch = fullText.match(/===해시태그===([\s\S]*?)===체크리스트===/);
-    const checkMatch = fullText.match(/===체크리스트===([\s\S]*?)$/);
+    // 파싱 (구분자 변형에 유연하게 처리)
+    function extractSection(text, startKey, endKey) {
+      // ===키=== 또는 공백 포함 변형 모두 처리
+      const startRe = new RegExp(`===\\s*${startKey}\\s*===`, 'i');
+      const endRe = endKey ? new RegExp(`===\\s*${endKey}\\s*===`, 'i') : null;
+      const startIdx = text.search(startRe);
+      if (startIdx === -1) return null;
+      const afterStart = text.slice(startIdx).replace(startRe, '').trimStart();
+      if (!endRe) return afterStart.trim();
+      const endIdx = afterStart.search(endRe);
+      return endIdx === -1 ? afterStart.trim() : afterStart.slice(0, endIdx).trim();
+    }
 
-    currentResults.full = bodyMatch ? bodyMatch[1].trim() : fullText;
-    currentResults.title = titleMatch ? titleMatch[1].trim() : '제목 파싱 실패';
-    currentResults.image = imageMatch ? imageMatch[1].trim() : '이미지 컷 파싱 실패';
-    currentResults.hashtag = hashMatch ? hashMatch[1].trim() : '해시태그 파싱 실패';
-    currentResults.checklist = checkMatch ? checkMatch[1].trim() : '체크리스트 파싱 실패';
+    currentResults.title     = extractSection(fullText, '제목후보', '본문') || '제목 파싱 실패';
+    currentResults.full      = extractSection(fullText, '본문', '이미지컷') || extractSection(fullText, '본문', '해시태그') || fullText;
+    currentResults.image     = extractSection(fullText, '이미지컷', '해시태그') || '이미지 컷 파싱 실패';
+    currentResults.hashtag   = extractSection(fullText, '해시태그', '체크리스트') || extractSection(fullText, '해시태그', null) || '해시태그 파싱 실패';
+    currentResults.checklist = extractSection(fullText, '체크리스트', null) || '체크리스트 파싱 실패';
 
     // UI 업데이트
     setLoading(false);
